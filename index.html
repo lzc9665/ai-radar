@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 雷达 · 每周最新 AI 工具导航</title>
+  <meta name="description" content="精选全球最新 AI 工具，覆盖写作、编程、图像、视频、效率等场景。每周更新，帮你追上 AI 时代。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #1a1a25;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #e8e8f0;
+      --text2: #9090a8;
+      --text3: #5a5a72;
+      --accent: #7c6df5;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(124,109,245,0.25);
+      --green: #4ade80;
+      --orange: #fb923c;
+      --pink: #f472b6;
+      --cyan: #22d3ee;
+      --yellow: #facc15;
+      --red: #f87171;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── 顶部导航 ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      height: 60px;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; font-weight: 700; color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.6; transform:scale(1.3); }
+    }
+    .nav-badge {
+      font-size: 11px; font-weight: 500; color: var(--text2);
+      background: var(--bg3); border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 32px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(124,109,245,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-week {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; color: var(--accent2);
+      background: rgba(124,109,245,0.12); border: 1px solid rgba(124,109,245,0.25);
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 24px;
+    }
+    .hero-week .blink {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      animation: blink 1.2s ease infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 16px; color: var(--text2);
+      max-width: 500px; margin: 0 auto 32px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num {
+      font-size: 28px; font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat .label { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+    /* ── 过滤栏 ── */
+    .filter-bar {
+      padding: 0 32px 24px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    }
+    .filter-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 24px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg2); color: var(--text2);
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-btn.active {
+      background: var(--accent); border-color: var(--accent);
+      color: #fff; box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .filter-btn .emoji { font-size: 14px; }
+    .search-wrap {
+      margin-left: auto;
+      position: relative; display: flex; align-items: center;
+    }
+    .search-wrap svg {
+      position: absolute; left: 12px;
+      width: 15px; height: 15px; color: var(--text3);
+    }
+    .search-input {
+      background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); font-size: 13px;
+      padding: 7px 14px 7px 34px; border-radius: 24px;
+      outline: none; width: 200px;
+      transition: all .2s;
+    }
+    .search-input::placeholder { color: var(--text3); }
+    .search-input:focus { border-color: var(--accent); width: 260px; }
+
+    /* ── 主内容 ── */
+    .main { padding: 0 32px 80px; }
+
+    /* 分组标题 */
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin: 0 0 20px;
+    }
+    .section-header h2 {
+      font-size: 15px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+    .section-header .line {
+      flex:1; height:1px; background: var(--border);
+    }
+    .section-header .count {
+      font-size: 12px; color: var(--text3);
+      background: var(--bg3); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 10px;
+    }
+
+    /* 产品网格 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    /* 产品卡片 */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .card.featured {
+      border-color: rgba(124,109,245,0.3);
+      background: linear-gradient(135deg, rgba(124,109,245,0.06) 0%, var(--bg2) 60%);
+    }
+    .card.featured::after {
+      content: '🔥 本周热门';
+      position: absolute; top: 12px; right: 12px;
+      font-size: 10px; font-weight: 600;
+      color: var(--orange);
+      background: rgba(251,146,60,0.12); border: 1px solid rgba(251,146,60,0.2);
+      padding: 3px 8px; border-radius: 8px;
+    }
+    .card-top { display: flex; align-items: flex-start; gap: 12px; }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .card-info { flex:1; min-width:0; }
+    .card-name {
+      font-size: 15px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .card-tagline {
+      font-size: 12px; color: var(--text3); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .card-desc {
+      font-size: 13px; color: var(--text2); line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+    .tag {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 9px; border-radius: 8px;
+    }
+    .tag-cat {
+      background: var(--bg3); color: var(--text2);
+      border: 1px solid var(--border);
+    }
+    .votes {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: var(--text3);
+    }
+    .votes svg { width:12px; height:12px; }
+
+    /* 分类色标 */
+    .cat-model    { background: rgba(124,109,245,0.15); color: var(--accent2); }
+    .cat-code     { background: rgba(34,211,238,0.12); color: var(--cyan); }
+    .cat-image    { background: rgba(244,114,182,0.12); color: var(--pink); }
+    .cat-video    { background: rgba(251,146,60,0.12); color: var(--orange); }
+    .cat-write    { background: rgba(74,222,128,0.12); color: var(--green); }
+    .cat-agent    { background: rgba(250,204,21,0.1); color: var(--yellow); }
+    .cat-security { background: rgba(248,113,113,0.12); color: var(--red); }
+    .cat-productivity { background: rgba(34,211,238,0.08); color: #60d4f0; }
+
+    /* 热度条 */
+    .heat-bar {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text3);
+    }
+    .heat-dots { display:flex; gap:3px; }
+    .heat-dot {
+      width:5px; height:5px; border-radius:50%;
+      background: var(--border);
+    }
+    .heat-dot.on { background: var(--orange); }
+
+    /* ── 本周大事记 ── */
+    .news-strip {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .news-strip h3 {
+      font-size: 13px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 16px;
+    }
+    .news-list { display: flex; flex-direction: column; gap: 10px; }
+    .news-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; border-radius: 10px;
+      background: var(--bg3);
+      transition: all .2s;
+    }
+    .news-item:hover { background: rgba(124,109,245,0.06); }
+    .news-emoji { font-size: 18px; flex-shrink:0; margin-top:1px; }
+    .news-body { flex:1; }
+    .news-title { font-size: 14px; font-weight: 500; color: var(--text); line-height:1.4; }
+    .news-sub { font-size: 12px; color: var(--text3); margin-top: 3px; }
+    .news-badge {
+      flex-shrink:0; font-size:10px; font-weight:600;
+      padding: 3px 8px; border-radius:6px;
+      align-self: flex-start; margin-top:2px;
+    }
+    .badge-hot { background:rgba(251,146,60,.15); color:var(--orange); }
+    .badge-new { background:rgba(74,222,128,.12); color:var(--green); }
+    .badge-warn { background:rgba(248,113,113,.12); color:var(--red); }
+    .badge-data { background:rgba(124,109,245,.12); color:var(--accent2); }
+
+    /* ── 趋势栏 ── */
+    .trends {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .trend-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 20px;
+    }
+    .trend-card .t-num {
+      font-size: 28px; font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .trend-card .t-label { font-size: 12px; color: var(--text3); margin-top: 4px; }
+    .trend-card .t-desc { font-size: 13px; color: var(--text2); margin-top: 8px; line-height:1.5; }
+
+    /* ── 变现：赞助商 Banner ── */
+    .sponsor-banner {
+      margin-bottom: 48px;
+      background: linear-gradient(135deg, rgba(124,109,245,0.08) 0%, rgba(34,211,238,0.05) 100%);
+      border: 1px solid rgba(124,109,245,0.25);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .sponsor-banner .sp-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      color: var(--accent2); background: rgba(124,109,245,0.15);
+      border: 1px solid rgba(124,109,245,0.25);
+      padding: 3px 8px; border-radius: 6px; flex-shrink:0;
+    }
+    .sponsor-banner .sp-body { flex:1; min-width:200px; }
+    .sponsor-banner .sp-name { font-size:15px; font-weight:600; color:var(--text); }
+    .sponsor-banner .sp-desc { font-size:12px; color:var(--text2); margin-top:2px; }
+    .sponsor-banner .sp-cta {
+      flex-shrink:0;
+      font-size:13px; font-weight:600;
+      padding: 8px 20px; border-radius:10px;
+      background: var(--accent); color:#fff;
+      text-decoration: none;
+      transition: all .2s;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .sponsor-banner .sp-cta:hover { background: var(--accent2); transform:translateY(-1px); }
+
+    /* ── 变现：精选推荐收录位 ── */
+    .promote-section {
+      background: var(--bg2);
+      border: 1px dashed rgba(124,109,245,0.3);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .promote-section h3 {
+      font-size: 16px; font-weight: 600; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .promote-section p {
+      font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height:1.6;
+    }
+    .promote-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px; margin-bottom: 20px;
+    }
+    .promote-slot {
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      display: flex; flex-direction:column; align-items:center; gap:8px;
+    }
+    .promote-slot .slot-icon {
+      width:40px; height:40px; border-radius:10px;
+      background: var(--bg3); display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+    }
+    .promote-slot .slot-label { font-size:12px; color:var(--text3); }
+    .promote-slot.filled { border-color: rgba(124,109,245,0.2); background: rgba(124,109,245,0.04); }
+    .promote-slot.filled .slot-label { color: var(--text2); }
+    .promote-cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary {
+      font-size:13px; font-weight:600;
+      padding: 10px 24px; border-radius:10px;
+      background: var(--accent); color:#fff;
+      text-decoration:none; border:none; cursor:pointer;
+      transition: all .2s;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-primary:hover { background:var(--accent2); transform:translateY(-1px); }
+    .btn-secondary {
+      font-size:13px; font-weight:500;
+      padding: 10px 24px; border-radius:10px;
+      background: var(--bg3); color:var(--text2);
+      text-decoration:none; border: 1px solid var(--border); cursor:pointer;
+      transition: all .2s;
+    }
+    .btn-secondary:hover { border-color:var(--border-hover); color:var(--text); }
+
+    /* ── 变现：订阅区块 ── */
+    .subscribe-block {
+      background: linear-gradient(135deg, rgba(124,109,245,0.1) 0%, rgba(34,211,238,0.06) 100%);
+      border: 1px solid rgba(124,109,245,0.2);
+      border-radius: 20px;
+      padding: 40px 32px;
+      text-align:center;
+      margin-bottom: 48px;
+      position:relative; overflow:hidden;
+    }
+    .subscribe-block::before {
+      content:'';
+      position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+      width:400px; height:200px;
+      background: radial-gradient(ellipse, rgba(124,109,245,0.15) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .subscribe-block h3 {
+      font-size:22px; font-weight:700;
+      background: linear-gradient(135deg,#fff,var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:10px;
+    }
+    .subscribe-block p { font-size:14px; color:var(--text2); margin-bottom:24px; }
+    .sub-plans {
+      display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+      margin-bottom: 24px;
+    }
+    .sub-plan {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 24px;
+      min-width: 160px; text-align:center;
+      transition: all .25s; cursor:pointer;
+    }
+    .sub-plan:hover, .sub-plan.popular {
+      border-color: rgba(124,109,245,0.4);
+      background: rgba(124,109,245,0.08);
+    }
+    .sub-plan.popular { position:relative; }
+    .sub-plan.popular::before {
+      content:'推荐';
+      position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+      font-size:10px; font-weight:700; color:#fff;
+      background: var(--accent); padding:2px 10px; border-radius:10px;
+    }
+    .sub-plan .plan-price {
+      font-size:24px; font-weight:700; color:var(--text);
+    }
+    .sub-plan .plan-price span { font-size:13px; font-weight:400; color:var(--text3); }
+    .sub-plan .plan-name { font-size:13px; color:var(--text2); margin-top:4px; }
+    .sub-plan .plan-perks { font-size:11px; color:var(--text3); margin-top:8px; line-height:1.6; }
+    .sub-input-row {
+      display:flex; gap:10px; justify-content:center; max-width:420px; margin:0 auto;
+    }
+    .sub-input {
+      flex:1; background: rgba(255,255,255,0.06); border:1px solid var(--border);
+      color:var(--text); font-size:13px; padding:10px 16px; border-radius:10px;
+      outline:none;
+    }
+    .sub-input::placeholder { color:var(--text3); }
+    .sub-input:focus { border-color: var(--accent); }
+
+    /* ── 底部 ── */
+    .footer {
+      text-align: center; padding: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--text3); font-size: 12px;
+    }
+    .footer a { color: var(--accent2); text-decoration: none; }
+
+    /* ── 分组 section ── */
+    .section { margin-bottom: 12px; }
+
+    /* hidden */
+    .card.hidden { display: none; }
+
+    /* 响应式 */
+    @media(max-width:600px) {
+      .nav { padding: 0 16px; }
+      .hero { padding: 48px 16px 40px; }
+      .filter-bar { padding: 0 16px 20px; }
+      .main { padding: 0 16px 60px; }
+      .search-wrap { margin-left: 0; width: 100%; }
+      .search-input { width: 100%; }
+      .search-input:focus { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 导航 ── -->
+<nav class="nav">
+  <a class="nav-logo" href="#">
+    <span class="dot"></span>
+    AI 雷达
+  </a>
+  <span class="nav-badge">第 15 周 · 2026.04.07</span>
+</nav>
+
+<!-- ── Hero ── -->
+<header class="hero">
+  <div class="hero-week">
+    <span class="blink"></span>
+    本周实时更新 · 2026年4月第2周
+  </div>
+  <h1>追上 AI 时代<br>从这里开始</h1>
+  <p>精选全球最值得关注的 AI 工具，每周更新。<br>拒绝信息噪音，只看最有价值的。</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">42</div><div class="label">本周收录工具</div></div>
+    <div class="hero-stat"><div class="num">8</div><div class="label">分类场景</div></div>
+    <div class="hero-stat"><div class="num">5</div><div class="label">趋势洞察</div></div>
+  </div>
+</header>
+
+<!-- ── 过滤栏 ── -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-cat="all"><span class="emoji">🌐</span> 全部</button>
+  <button class="filter-btn" data-cat="模型"><span class="emoji">🧠</span> 大模型</button>
+  <button class="filter-btn" data-cat="编程"><span class="emoji">💻</span> 编程</button>
+  <button class="filter-btn" data-cat="图像"><span class="emoji">🎨</span> 图像</button>
+  <button class="filter-btn" data-cat="视频"><span class="emoji">🎬</span> 视频</button>
+  <button class="filter-btn" data-cat="写作"><span class="emoji">✍️</span> 写作</button>
+  <button class="filter-btn" data-cat="智能体"><span class="emoji">🤖</span> 智能体</button>
+  <button class="filter-btn" data-cat="效率"><span class="emoji">⚡</span> 效率</button>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input class="search-input" type="text" placeholder="搜索工具名称..." id="searchInput" />
+  </div>
+</div>
+
+<!-- ── 主内容 ── -->
+<main class="main">
+
+  <!-- ── 赞助商 Banner（本周赞助位）── -->
+  <div class="sponsor-banner">
+    <span class="sp-badge">SPONSOR</span>
+    <div class="sp-body">
+      <div class="sp-name">🚀 你的产品出现在这里</div>
+      <div class="sp-desc">每周触达 10,000+ AI 从业者 · 精准曝光 · 限量一席</div>
+    </div>
+    <a class="sp-cta" href="mailto:contact@ai-radar.cn">立即咨询</a>
+  </div>
+
+  <!-- 本周大事记 -->
+  <div class="section-header">
+    <h2>本周大事记</h2>
+    <div class="line"></div>
+    <div class="count">10 条</div>
+  </div>
+  <div class="news-strip" style="margin-bottom:40px;">
+    <div class="news-list">
+      <div class="news-item">
+        <span class="news-emoji">💰</span>
+        <div class="news-body">
+          <div class="news-title">OpenAI 完成史上最大私募融资：1220 亿美元，估值 8520 亿</div>
+          <div class="news-sub">软银追加 100 亿美元 · 月收入超 20 亿美元 · IPO 前景存变数</div>
+        </div>
+        <span class="news-badge badge-hot">🔥 爆</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🧬</span>
+        <div class="news-body">
+          <div class="news-title">Anthropic 以 4 亿美元收购 AI 生物科技公司 Coefficient Bio</div>
+          <div class="news-sub">公司成立仅 8 个月 · 全股票支付 · Anthropic 史上最大收购</div>
+        </div>
+        <span class="news-badge badge-new">NEW</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🔓</span>
+        <div class="news-body">
+          <div class="news-title">Google Gemma 4 开源：31B 小模型性能达大模型 85%</div>
+          <div class="news-sub">256K 上下文 · Apache 2.0 协议 · 支持树莓派运行 · 算力节省 40%</div>
+        </div>
+        <span class="news-badge badge-new">开源</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🇨🇳</span>
+        <div class="news-body">
+          <div class="news-title">阿里 Qwen3.6-Plus 发布：100 万上下文，Agent 编程新标杆</div>
+          <div class="news-sub">智能体编程优化 · 多模态版"氛围编码"范式 · 国产大模型持续追赶</div>
+        </div>
+        <span class="news-badge badge-new">发布</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">💻</span>
+        <div class="news-body">
+          <div class="news-title">Cursor 3 发布：进入"智能体集群"时代，多 Agent 协同编程</div>
+          <div class="news-sub">本地+云端无缝切换 · 内置浏览器自动测试 · 全新插件生态</div>
+        </div>
+        <span class="news-badge badge-new">升级</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🎬</span>
+        <div class="news-body">
+          <div class="news-title">快手可灵 AI 月活破 780 万，登顶全球 AI 视频榜</div>
+          <div class="news-sub">超越 Sora 峰值 470 万 · OpenAI 已关停 Sora · 中国产品全球领跑</div>
+        </div>
+        <span class="news-badge badge-data">📊 数据</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🚨</span>
+        <div class="news-body">
+          <div class="news-title">AI 智能体 4 小时自主攻破 FreeBSD，无人工干预获 Root 权限</div>
+          <div class="news-sub">CVE-2026-4747 · 基于 Claude · 影响 Netflix/PlayStation 等基础设施</div>
+        </div>
+        <span class="news-badge badge-warn">⚠️ 安全</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🇨🇳</span>
+        <div class="news-body">
+          <div class="news-title">中国 AI 周调用量 7.36 万亿 Token，连续三周超越美国</div>
+          <div class="news-sub">DeepSeek V4 深度适配华为芯片 · 中美 AI 生态加速脱钩</div>
+        </div>
+        <span class="news-badge badge-data">📊 数据</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">📜</span>
+        <div class="news-body">
+          <div class="news-title">广电联合会出手：七类 AI 侵权行为明令禁止</div>
+          <div class="news-sub">AI 换脸/声纹克隆/深度伪造 · 红果短剧成首个下架案例</div>
+        </div>
+        <span class="news-badge badge-warn">监管</span>
+      </div>
+      <div class="news-item">
+        <span class="news-emoji">🎙️</span>
+        <div class="news-body">
+          <div class="news-title">OpenAI 收购科技播客平台 TBPN，争夺 AGI 时代舆论叙事权</div>
+          <div class="news-sub">COO/CMO 相继离职 · IPO 治理稳定性受质疑</div>
+        </div>
+        <span class="news-badge badge-hot">热议</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本周趋势数据 -->
+  <div class="section-header">
+    <h2>关键数据</h2>
+    <div class="line"></div>
+  </div>
+  <div class="trends">
+    <div class="trend-card">
+      <div class="t-num">$1,220亿</div>
+      <div class="t-label">OpenAI 累计融资额</div>
+      <div class="t-desc">估值 8520 亿美元，仅次于微软苹果谷歌</div>
+    </div>
+    <div class="trend-card">
+      <div class="t-num">780万</div>
+      <div class="t-label">可灵 AI 月活用户</div>
+      <div class="t-desc">全球移动端 AI 视频榜第一，Sora 已关停</div>
+    </div>
+    <div class="trend-card">
+      <div class="t-num">7.36万亿</div>
+      <div class="t-label">中国 AI 周调用 Token 数</div>
+      <div class="t-desc">连续三周超越美国，独立生态加速形成</div>
+    </div>
+    <div class="trend-card">
+      <div class="t-num">4 小时</div>
+      <div class="t-label">AI 自主攻破 FreeBSD 耗时</div>
+      <div class="t-desc">AI 安全攻防进入全新阶段，防御明显落后</div>
+    </div>
+    <div class="trend-card">
+      <div class="t-num">40%</div>
+      <div class="t-label">Gemma 4 算力节省</div>
+      <div class="t-desc">小参数吊打大模型，效率时代正式开启</div>
+    </div>
+  </div>
+
+  <!-- 本周新品 -->
+  <div class="section" id="section-new">
+    <div class="section-header">
+      <h2>🆕 本周新品 · Product Hunt 热榜</h2>
+      <div class="line"></div>
+      <div class="count" id="count-new">10</div>
+    </div>
+    <div class="grid" id="grid-new"></div>
+  </div>
+
+  <!-- ── 订阅区块 ── -->
+  <div class="subscribe-block">
+    <h3>每周一早 8 点，AI 雷达准时送达</h3>
+    <p>不追热点，只选有价值的。免费版每周摘要 · Pro 版深度分析 + 竞品对比报告</p>
+    <div class="sub-plans">
+      <div class="sub-plan">
+        <div class="plan-price">免费</div>
+        <div class="plan-name">基础订阅</div>
+        <div class="plan-perks">每周 AI 动态摘要<br>Product Hunt 热榜<br>邮件推送</div>
+      </div>
+      <div class="sub-plan popular">
+        <div class="plan-price">¥29<span>/月</span></div>
+        <div class="plan-name">Pro 会员</div>
+        <div class="plan-perks">深度竞品分析报告<br>趋势预判 + 机会点<br>专属读者社群<br>历史档案全访问</div>
+      </div>
+      <div class="sub-plan">
+        <div class="plan-price">¥199<span>/年</span></div>
+        <div class="plan-name">年度会员</div>
+        <div class="plan-perks">Pro 全部权益<br>年度 AI 产业报告<br>早鸟价锁定</div>
+      </div>
+    </div>
+    <div class="sub-input-row">
+      <input class="sub-input" type="email" placeholder="输入邮箱，免费订阅每周 AI 动态" />
+      <button class="btn-primary" onclick="handleSubscribe(this)">免费订阅</button>
+    </div>
+  </div>
+
+  <!-- ── 精选推荐收录位 ── -->
+  <div class="promote-section">
+    <h3>💎 精选推荐位 · 让更多人发现你的产品</h3>
+    <p>每期限量 3 个"精选推荐"展示位，置顶展示 7 天<br>精准触达每周 AI 从业者、开发者、创业者读者群</p>
+    <div class="promote-cards">
+      <div class="promote-slot filled">
+        <div class="slot-icon">🤖</div>
+        <div class="card-name" style="font-size:13px;">ZooClaw</div>
+        <div class="slot-label">已收录 · 本周</div>
+      </div>
+      <div class="promote-slot filled">
+        <div class="slot-icon">💻</div>
+        <div class="card-name" style="font-size:13px;">Cursor 3</div>
+        <div class="slot-label">已收录 · 本周</div>
+      </div>
+      <div class="promote-slot">
+        <div class="slot-icon" style="font-size:24px;color:var(--text3);">+</div>
+        <div class="slot-label">下周收录位 · 开放中</div>
+      </div>
+    </div>
+    <div class="promote-cta-row">
+      <a class="btn-primary" href="mailto:contact@ai-radar.cn?subject=申请精选推荐收录">申请收录 →</a>
+      <a class="btn-secondary" href="#pricing">查看定价</a>
+    </div>
+  </div>
+
+  <!-- 精选工具 -->
+  <div class="section" id="section-featured">
+    <div class="section-header">
+      <h2>⭐ 精选工具 · 长期必备</h2>
+      <div class="line"></div>
+      <div class="count" id="count-featured">0</div>
+    </div>
+    <div class="grid" id="grid-featured"></div>
+  </div>
+
+  <!-- ── 定价锚点 ── -->
+  <div id="pricing" style="margin-bottom:48px;">
+    <div class="section-header">
+      <h2>💰 商业合作定价</h2>
+      <div class="line"></div>
+    </div>
+    <div class="trends">
+      <div class="trend-card">
+        <div class="t-num">¥299</div>
+        <div class="t-label">周赞助 Banner</div>
+        <div class="t-desc">首页顶部 Banner 展示一期（7天），含产品名、描述、链接，预估曝光 10,000+</div>
+      </div>
+      <div class="trend-card">
+        <div class="t-num">¥199</div>
+        <div class="t-label">精选收录位</div>
+        <div class="t-desc">产品置顶展示在「精选推荐」区，标注🔥，每期限量3席</div>
+      </div>
+      <div class="trend-card">
+        <div class="t-num">¥999</div>
+        <div class="t-label">深度评测文章</div>
+        <div class="t-desc">独立深度评测文章，社交媒体同步发布，长期可检索</div>
+      </div>
+      <div class="trend-card">
+        <div class="t-num">面议</div>
+        <div class="t-label">定制行业版</div>
+        <div class="t-desc">针对特定垂类（医疗/金融/教育）定制 AI 工具周报，企业订阅</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>AI 雷达 · 每周追踪全球最值得关注的 AI 工具</p>
+  <p style="margin-top:6px;">数据来源：Product Hunt · 财新 · 36氪 · The Neuron · TechCrunch</p>
+</footer>
+
+<script>
+// ── 产品数据 ──────────────────────────────────────────────
+const newProducts = [
+  {
+    name: "Cursor 3",
+    tagline: "AI 编程进入智能体集群时代",
+    desc: "多个 AI 智能体在同一工作区协同，分别负责编码、测试、文档。本地+云端无缝切换，内置浏览器自动化测试，实现「写代码→测试→修复」完整闭环。",
+    icon: "💻", bg: "#1a2535",
+    cat: "编程", votes: 334, featured: true, heat: 5,
+    tags: ["Agent", "IDE", "云端协同"]
+  },
+  {
+    name: "Google Gemma 4",
+    tagline: "Google 最智能开源模型，小参数打败大模型",
+    desc: "31B 参数在推理与编程基准上达到20倍体量竞品的85%性能。256K超长上下文，Apache 2.0 协议商用友好，E2B/E4B 小型号甚至可在树莓派上运行。",
+    icon: "🧠", bg: "#1a2030",
+    cat: "模型", votes: 394, featured: true, heat: 5,
+    tags: ["开源", "多模态", "边缘端"]
+  },
+  {
+    name: "Qwen3.6-Plus",
+    tagline: "阿里最强 Agent 编程模型，100万上下文",
+    desc: "专为 AI 智能体编程场景深度优化，支持 100 万字符超长上下文。工具调用、多步骤任务规划能力突出，在主流 Agent 编程评测中超越同级竞品 2-3 倍。",
+    icon: "🇨🇳", bg: "#1d1a25",
+    cat: "模型", votes: 140, featured: true, heat: 4,
+    tags: ["国产", "Agent", "编程"]
+  },
+  {
+    name: "ZooClaw",
+    tagline: "一个入口，接入 AI 专家团队",
+    desc: "用自然语言提问，任务自动路由到具有结构化领域知识的对应智能体，并以自然语音回复。无需设置、无需部署、无需 API 密钥，即开即用。",
+    icon: "🤖", bg: "#1e1a20",
+    cat: "智能体", votes: 360, featured: true, heat: 5,
+    tags: ["零配置", "语音", "路由"]
+  },
+  {
+    name: "VoiceOS",
+    tagline: "用声音控制你的整台电脑",
+    desc: "面向桌面的通用语音→动作系统。通过自然语音命令消除应用间切换，专注度最大化。Mac 和 Windows 全局可用，无需唤醒词。",
+    icon: "🎙️", bg: "#1a2020",
+    cat: "效率", votes: 255, featured: false, heat: 4,
+    tags: ["语音", "Mac", "Windows"]
+  },
+  {
+    name: "NotebookLM 信息图样式",
+    tagline: "资料一键转信息图，10种预设风格",
+    desc: "将任何资料源直接转换为精美信息图，支持10种预设样式和自定义模式，从研究到可视化只需数秒。Google 出品，NotebookLM 最新更新。",
+    icon: "📊", bg: "#1a2218",
+    cat: "写作", votes: 179, featured: false, heat: 3,
+    tags: ["可视化", "Google", "报告"]
+  },
+  {
+    name: "Straude",
+    tagline: "追踪你的 Claude Code Token 消耗全球排名",
+    desc: "面向 Claude Code 用户的全球 Token 消耗排行榜，追踪每日花费、连续记录和使用统计，与全球顶级 AI 构建者对比，了解自己的使用强度。",
+    icon: "📈", bg: "#1a1e28",
+    cat: "效率", votes: 153, featured: false, heat: 3,
+    tags: ["Claude", "统计", "开发者"]
+  },
+  {
+    name: "ChatGPT on CarPlay",
+    tagline: "驾车时用 ChatGPT，全球免费开放",
+    desc: "在 Apple CarPlay 上接入 ChatGPT 语音功能，驾驶时免提使用 AI。全球所有套餐均可用，无需额外订阅。",
+    icon: "🚗", bg: "#201a1a",
+    cat: "效率", votes: 130, featured: false, heat: 3,
+    tags: ["iOS", "语音", "驾驶"]
+  },
+  {
+    name: "Otto by Audos",
+    tagline: "AI 联合创始人：从想法到第一个客户",
+    desc: "自动构建落地页、运行广告、为你获取首位客户，实现从想法到营收的无代码全自动化流程。适合独立开发者和早期创业者。",
+    icon: "🚀", bg: "#1e1e1a",
+    cat: "智能体", votes: 126, featured: false, heat: 3,
+    tags: ["创业", "无代码", "自动化"]
+  },
+  {
+    name: "StampCut",
+    tagline: "用 iPhone 把任何东西变成数字邮票",
+    desc: "用 iPhone 摄像头指向任何物体——植物、动物、日常物品——框选并捕获为属于自己的数字「邮票」。收藏你遇见的一切。",
+    icon: "📮", bg: "#1a1e20",
+    cat: "效率", votes: 118, featured: false, heat: 2,
+    tags: ["iOS", "收藏", "创意"]
+  }
+];
+
+const featuredProducts = [
+  {
+    name: "Claude Opus 4.6",
+    tagline: "Anthropic 旗舰模型，推理与安全性最佳平衡",
+    desc: "最新版本在长文推理、代码理解和工具调用上全面升级。4 小时内自主发现 FreeBSD 零日漏洞，展示了 AI 自主能力的最新边界。",
+    icon: "🤖", bg: "#1a1a28",
+    cat: "模型", votes: null, featured: true, heat: 5,
+    tags: ["推理", "安全", "工具调用"]
+  },
+  {
+    name: "可灵 AI (Kling)",
+    tagline: "全球移动端 AI 视频月活 No.1",
+    desc: "快手出品的 AI 视频生成工具，月活突破 780 万，超越已关停的 Sora。支持文字转视频、图片转视频，在运动流畅度和物理真实感上领先同类产品。",
+    icon: "🎬", bg: "#201a1a",
+    cat: "视频", votes: null, featured: true, heat: 5,
+    tags: ["国产", "文生视频", "移动端"]
+  },
+  {
+    name: "Midjourney V7",
+    tagline: "AI 图像生成的行业标杆",
+    desc: "最新版本大幅提升了人物细节、手部渲染和光影控制。支持个性化风格训练，提供 Draft 模式快速出图，是商业创意工作的首选工具。",
+    icon: "🎨", bg: "#1a1e20",
+    cat: "图像", votes: null, featured: true, heat: 5,
+    tags: ["创意", "商用", "风格训练"]
+  },
+  {
+    name: "GitHub Copilot Enterprise",
+    tagline: "企业级 AI 编程助手，理解你的整个代码库",
+    desc: "接入企业私有代码库，理解上下文后给出针对性建议。支持代码审查、文档生成、测试编写。Chat 功能可直接回答关于特定 PR 和 Issue 的问题。",
+    icon: "⚡", bg: "#1a2020",
+    cat: "编程", votes: null, featured: false, heat: 4,
+    tags: ["企业", "代码库", "PR"]
+  },
+  {
+    name: "Perplexity Pro",
+    tagline: "AI 搜索引擎，带引用来源的实时问答",
+    desc: "每次回答都附带真实信息来源，支持追问和深度研究模式。Pro 版接入 GPT-5、Claude、Gemini 多个模型，支持文件上传分析和图像搜索。",
+    icon: "🔍", bg: "#1a1e28",
+    cat: "写作", votes: null, featured: false, heat: 4,
+    tags: ["搜索", "引用", "研究"]
+  },
+  {
+    name: "Runway Gen-4",
+    tagline: "好莱坞级 AI 视频生成，角色一致性突破",
+    desc: "最新 Gen-4 版本解决了 AI 视频最大痛点——角色跨镜头一致性。支持基于参考图的精准控制，在时装、广告、短片创作领域获得大量专业用户。",
+    icon: "🎥", bg: "#1e1a1a",
+    cat: "视频", votes: null, featured: false, heat: 4,
+    tags: ["角色一致", "广告", "专业"]
+  },
+  {
+    name: "Notion AI",
+    tagline: "你的工作空间内置 AI 助手",
+    desc: "无缝集成在 Notion 中，可总结文档、起草内容、提取行动项、翻译文本。最新 Q1 版本支持跨页面知识检索，回答基于你整个 Workspace 的内容。",
+    icon: "📝", bg: "#1a1e1a",
+    cat: "写作", votes: null, featured: false, heat: 4,
+    tags: ["文档", "协作", "知识库"]
+  },
+  {
+    name: "ElevenLabs",
+    tagline: "最逼真的 AI 声音克隆与语音合成",
+    desc: "只需 1 分钟音频即可克隆任意声音。支持 30+ 语言，情感控制，实时语音生成。广泛用于有声书、播客、视频配音和游戏 NPC。",
+    icon: "🔊", bg: "#1a2025",
+    cat: "写作", votes: null, featured: false, heat: 4,
+    tags: ["声音克隆", "配音", "多语言"]
+  }
+];
+
+// ── 渲染函数 ──────────────────────────────────────────────
+function catClass(cat) {
+  const map = { "模型":"cat-model","编程":"cat-code","图像":"cat-image","视频":"cat-video","写作":"cat-write","智能体":"cat-agent","安全":"cat-security","效率":"cat-productivity" };
+  return map[cat] || "tag-cat";
+}
+
+function heatDots(h) {
+  let html = '<div class="heat-dots">';
+  for (let i=1;i<=5;i++) html += `<div class="heat-dot${i<=h?' on':''}"></div>`;
+  return html + '</div>';
+}
+
+function renderCard(p) {
+  const voteHtml = p.votes ? `<span class="votes">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    ${p.votes}
+  </span>` : '';
+  const tagsHtml = (p.tags||[]).map(t=>`<span class="tag tag-cat">${t}</span>`).join('');
+  return `
+    <div class="card${p.featured?' featured':''}" data-cat="${p.cat}" data-name="${p.name.toLowerCase()}">
+      <div class="card-top">
+        <div class="card-icon" style="background:${p.bg}">${p.icon}</div>
+        <div class="card-info">
+          <div class="card-name">${p.name}</div>
+          <div class="card-tagline">${p.tagline}</div>
+        </div>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-footer">
+        <span class="tag ${catClass(p.cat)}">${p.cat}</span>
+        ${tagsHtml}
+        <div class="heat-bar">${heatDots(p.heat)}${voteHtml}</div>
+      </div>
+    </div>`;
+}
+
+function renderAll(cat='all', keyword='') {
+  const kw = keyword.toLowerCase();
+  ['new','featured'].forEach(section => {
+    const products = section==='new' ? newProducts : featuredProducts;
+    const grid = document.getElementById('grid-'+section);
+    let count = 0;
+    grid.innerHTML = products.map(p => {
+      const matchCat = cat==='all' || p.cat===cat;
+      const matchKw = !kw || p.name.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw) || p.tagline.toLowerCase().includes(kw);
+      if (matchCat && matchKw) { count++; return renderCard(p); }
+      return `<div class="card hidden" data-cat="${p.cat}" data-name="${p.name.toLowerCase()}"></div>`;
+    }).join('');
+    document.getElementById('count-'+section).textContent = count;
+    // 隐藏整个 section 如果没有结果
+    document.getElementById('section-'+section).style.display = count ? '' : 'none';
+  });
+}
+
+// ── 事件 ──────────────────────────────────────────────────
+let currentCat = 'all';
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat = btn.dataset.cat;
+    renderAll(currentCat, document.getElementById('searchInput').value);
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  renderAll(currentCat, e.target.value);
+});
+
+// ── 订阅交互 ──────────────────────────────────────────────
+function handleSubscribe(btn) {
+  const input = btn.previousElementSibling;
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = 'var(--red)';
+    input.placeholder = '请输入有效邮箱地址';
+    setTimeout(()=>{ input.style.borderColor=''; input.placeholder='输入邮箱，免费订阅每周 AI 动态'; },2000);
+    return;
+  }
+  btn.textContent = '✓ 订阅成功！';
+  btn.style.background = 'var(--green)';
+  btn.style.color = '#000';
+  input.value = '';
+  input.placeholder = '已加入订阅列表，每周一早 8 点见 👋';
+  // 实际项目：这里接入 Mailchimp / Resend / 微信服务号 API
+}
+
+</script>
+</body>
+</html>
