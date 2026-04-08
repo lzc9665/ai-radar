@@ -28,9 +28,7 @@
       --yellow: #facc15;
       --red: #f87171;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background: var(--bg);
@@ -49,6 +47,7 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
+    .nav-left { display:flex; align-items:center; gap:24px; }
     .nav-logo {
       display: flex; align-items: center; gap: 10px;
       font-size: 18px; font-weight: 700; color: var(--text);
@@ -64,11 +63,35 @@
       0%,100% { opacity:1; transform:scale(1); }
       50% { opacity:.6; transform:scale(1.3); }
     }
+    .nav-links { display:flex; gap:6px; }
+    .nav-link {
+      font-size: 13px; font-weight: 500; color: var(--text3);
+      text-decoration: none;
+      padding: 6px 12px; border-radius: 8px;
+      transition: all .2s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg3); }
+    .nav-right { display:flex; align-items:center; gap:12px; }
     .nav-badge {
       font-size: 11px; font-weight: 500; color: var(--text2);
       background: var(--bg3); border: 1px solid var(--border);
       padding: 3px 10px; border-radius: 20px;
     }
+    /* 汉堡菜单 */
+    .hamburger {
+      display: none;
+      background: none; border: none; color: var(--text); cursor: pointer;
+      width: 36px; height: 36px;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+    }
+    .hamburger span {
+      display: block; width: 20px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translateY(5px) translateX(5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translateY(-5px) translateX(5px); }
 
     /* ── Hero ── */
     .hero {
@@ -160,7 +183,7 @@
     .search-input:focus { border-color: var(--accent); width: 260px; }
 
     /* ── 主内容 ── */
-    .main { padding: 0 32px 80px; }
+    .main { padding: 0 32px 80px; max-width: 1200px; margin: 0 auto; }
 
     /* 分组标题 */
     .section-header {
@@ -281,6 +304,163 @@
     }
     .heat-dot.on { background: var(--orange); }
 
+    /* ── 空状态 ── */
+    .empty-state {
+      text-align: center; padding: 60px 20px;
+      display: none;
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state .empty-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .empty-state .empty-desc { font-size: 13px; color: var(--text3); }
+    .empty-state .empty-clear {
+      margin-top: 16px;
+      font-size: 13px; font-weight: 500; color: var(--accent2);
+      background: none; border: none; cursor: pointer;
+      text-decoration: underline;
+    }
+    .empty-state .empty-clear:hover { color: var(--text); }
+
+    /* ── 新闻展开详情 ── */
+    .news-expand {
+      display: none;
+      padding: 12px 14px;
+      background: rgba(124,109,245,0.04);
+      border-top: 1px solid var(--border);
+      border-radius: 0 0 10px 10px;
+      margin-top: -4px;
+      font-size: 13px; color: var(--text2);
+      line-height: 1.7;
+    }
+    .news-expand.show { display: block; }
+    .news-expand a {
+      color: var(--accent2); text-decoration: none;
+      font-weight: 500;
+    }
+    .news-expand a:hover { text-decoration: underline; }
+    .news-source {
+      font-size: 11px; color: var(--text3); margin-top: 8px;
+    }
+    .news-toggle {
+      flex-shrink: 0;
+      background: none; border: none; color: var(--text3);
+      cursor: pointer; font-size: 16px; padding: 4px 8px;
+      border-radius: 6px;
+      transition: all .2s;
+      align-self: flex-start; margin-top: 2px;
+    }
+    .news-toggle:hover { background: var(--bg3); color: var(--text); }
+
+    /* ── 详情弹窗 ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%; max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 0;
+      animation: modalIn .3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform:translateY(20px) scale(0.97); }
+      to { opacity:1; transform:translateY(0) scale(1); }
+    }
+    .modal-header {
+      padding: 28px 28px 0;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .modal-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; flex-shrink: 0;
+    }
+    .modal-info { flex: 1; min-width: 0; }
+    .modal-name { font-size: 22px; font-weight: 700; color: var(--text); }
+    .modal-tagline { font-size: 14px; color: var(--text2); margin-top: 4px; }
+    .modal-close {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text3); font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--bg); color: var(--text); border-color: var(--border-hover); }
+    .modal-body { padding: 24px 28px; }
+    .modal-desc {
+      font-size: 15px; color: var(--text2); line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .modal-section-title {
+      font-size: 12px; font-weight: 600; color: var(--text3);
+      text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .modal-tag {
+      font-size: 12px; font-weight: 500;
+      padding: 5px 12px; border-radius: 8px;
+      background: var(--bg3); color: var(--text2);
+      border: 1px solid var(--border);
+    }
+    .modal-cat-tag {
+      font-size: 12px; font-weight: 600;
+      padding: 5px 12px; border-radius: 8px;
+    }
+    .modal-meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .modal-meta-item {
+      background: var(--bg3); border-radius: 12px; padding: 14px 16px;
+    }
+    .modal-meta-item .meta-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+    .modal-meta-item .meta-value { font-size: 15px; font-weight: 600; color: var(--text); }
+    .modal-features {
+      list-style: none; margin-bottom: 24px;
+    }
+    .modal-features li {
+      font-size: 14px; color: var(--text2);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .modal-features li:last-child { border-bottom: none; }
+    .modal-features li::before {
+      content: '✓'; color: var(--green); font-weight: 700;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .modal-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      padding: 0 28px 28px;
+    }
+    .btn-visit {
+      flex: 1; min-width: 140px;
+      font-size: 14px; font-weight: 600;
+      padding: 12px 20px; border-radius: 12px;
+      background: var(--accent); color: #fff;
+      text-decoration: none; text-align: center;
+      transition: all .2s;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .btn-visit:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-back {
+      font-size: 14px; font-weight: 500;
+      padding: 12px 20px; border-radius: 12px;
+      background: var(--bg3); color: var(--text2);
+      border: 1px solid var(--border);
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-back:hover { border-color: var(--border-hover); color: var(--text); }
+
     /* ── 本周大事记 ── */
     .news-strip {
       background: var(--bg2); border: 1px solid var(--border);
@@ -298,8 +478,11 @@
       padding: 12px 14px; border-radius: 10px;
       background: var(--bg3);
       transition: all .2s;
+      cursor: pointer;
+      position: relative;
     }
     .news-item:hover { background: rgba(124,109,245,0.06); }
+    .news-item.expanded { background: rgba(124,109,245,0.06); border-radius: 10px 10px 0 0; }
     .news-emoji { font-size: 18px; flex-shrink:0; margin-top:1px; }
     .news-body { flex:1; }
     .news-title { font-size: 14px; font-weight: 500; color: var(--text); line-height:1.4; }
@@ -390,7 +573,10 @@
       border-radius: 12px;
       padding: 20px 16px;
       display: flex; flex-direction:column; align-items:center; gap:8px;
+      cursor: default;
     }
+    .promote-slot.clickable { cursor: pointer; transition: all .2s; }
+    .promote-slot.clickable:hover { border-color: rgba(124,109,245,0.3); background: rgba(124,109,245,0.04); transform:translateY(-2px); }
     .promote-slot .slot-icon {
       width:40px; height:40px; border-radius:10px;
       background: var(--bg3); display:flex; align-items:center; justify-content:center;
@@ -495,15 +681,46 @@
     /* hidden */
     .card.hidden { display: none; }
 
+    /* 筛选结果提示条 */
+    .filter-status {
+      display: none;
+      padding: 12px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 13px; color: var(--text2);
+      align-items: center; gap: 8px;
+    }
+    .filter-status.show { display: flex; }
+    .filter-status .fs-cat {
+      font-weight: 600; color: var(--accent2);
+    }
+    .filter-status .fs-count {
+      margin-left: auto;
+      background: var(--bg3); padding: 2px 8px; border-radius: 8px;
+      font-size: 12px; color: var(--text3);
+    }
+
     /* 响应式 */
-    @media(max-width:600px) {
+    @media(max-width:768px) {
       .nav { padding: 0 16px; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 12px 16px; gap: 4px; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
       .hero { padding: 48px 16px 40px; }
       .filter-bar { padding: 0 16px 20px; }
       .main { padding: 0 16px 60px; }
       .search-wrap { margin-left: 0; width: 100%; }
       .search-input { width: 100%; }
       .search-input:focus { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .trends { grid-template-columns: 1fr 1fr; }
+      .modal-meta { grid-template-columns: 1fr; }
+      .modal-actions { flex-direction: column; }
+      .btn-visit { min-width: unset; }
+      .sub-plans { flex-direction: column; align-items: center; }
+      .sub-input-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -511,11 +728,25 @@
 
 <!-- ── 导航 ── -->
 <nav class="nav">
-  <a class="nav-logo" href="#">
-    <span class="dot"></span>
-    AI 雷达
-  </a>
-  <span class="nav-badge">第 15 周 · 2026.04.07</span>
+  <div class="nav-left">
+    <a class="nav-logo" href="#">
+      <span class="dot"></span>
+      AI 雷达
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a class="nav-link" href="#news" onclick="closeNav()">大事记</a>
+      <a class="nav-link" href="#section-new" onclick="closeNav()">新品</a>
+      <a class="nav-link" href="#section-featured" onclick="closeNav()">精选</a>
+      <a class="nav-link" href="#pricing" onclick="closeNav()">合作</a>
+      <a class="nav-link" href="#subscribe" onclick="closeNav()">订阅</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">第 15 周 · 2026.04.07</span>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- ── Hero ── -->
@@ -565,92 +796,151 @@
   </div>
 
   <!-- 本周大事记 -->
-  <div class="section-header">
+  <div class="section-header" id="news">
     <h2>本周大事记</h2>
     <div class="line"></div>
     <div class="count">10 条</div>
   </div>
   <div class="news-strip" style="margin-bottom:40px;">
-    <div class="news-list">
-      <div class="news-item">
+    <div class="news-list" id="newsList">
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">💰</span>
         <div class="news-body">
           <div class="news-title">OpenAI 完成史上最大私募融资：1220 亿美元，估值 8520 亿</div>
           <div class="news-sub">软银追加 100 亿美元 · 月收入超 20 亿美元 · IPO 前景存变数</div>
         </div>
         <span class="news-badge badge-hot">🔥 爆</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        OpenAI 本轮融资总额达 1220 亿美元，使其成为全球估值最高的私募公司。软银愿景基金在最后一轮追加了 100 亿美元。公司月经常性收入已超过 20 亿美元，但首席运营官和首席营销官相继离职，治理稳定性受市场质疑。IPO 时间表仍不确定。
+        <div class="news-source">来源：TechCrunch · 财新</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🧬</span>
         <div class="news-body">
           <div class="news-title">Anthropic 以 4 亿美元收购 AI 生物科技公司 Coefficient Bio</div>
           <div class="news-sub">公司成立仅 8 个月 · 全股票支付 · Anthropic 史上最大收购</div>
         </div>
         <span class="news-badge badge-new">NEW</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        Anthropic 正积极布局 AI 生命科学领域。Coefficient Bio 成立仅 8 个月，专注于利用 AI 加速药物发现和基因组研究。此次收购标志着 Anthropic 从纯粹的 AI 安全公司向垂直行业应用扩展的战略转变。
+        <div class="news-source">来源：The Information</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🔓</span>
         <div class="news-body">
           <div class="news-title">Google Gemma 4 开源：31B 小模型性能达大模型 85%</div>
           <div class="news-sub">256K 上下文 · Apache 2.0 协议 · 支持树莓派运行 · 算力节省 40%</div>
         </div>
         <span class="news-badge badge-new">开源</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        Google 发布 Gemma 4 系列，其中 31B 参数版本在推理和编程基准上达到 620B 级模型的 85% 性能。256K 超长上下文窗口，Apache 2.0 协议允许商用。E2B（2B）和 E4B（4B）小型号可在树莓派上运行，端侧 AI 部署成本降低 40%。
+        <div class="news-source">来源：Google AI Blog</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🇨🇳</span>
         <div class="news-body">
           <div class="news-title">阿里 Qwen3.6-Plus 发布：100 万上下文，Agent 编程新标杆</div>
           <div class="news-sub">智能体编程优化 · 多模态版"氛围编码"范式 · 国产大模型持续追赶</div>
         </div>
         <span class="news-badge badge-new">发布</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        阿里云发布通义千问 3.6-Plus，支持 100 万字符超长上下文，在 Agent 编程场景中深度优化。在 SWE-Bench、HumanEval 等主流评测中，超越同级竞品 2-3 倍。多模态版本支持"氛围编码"——上传截图即可生成对应页面代码。
+        <div class="news-source">来源：阿里云官方</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">💻</span>
         <div class="news-body">
           <div class="news-title">Cursor 3 发布：进入"智能体集群"时代，多 Agent 协同编程</div>
           <div class="news-sub">本地+云端无缝切换 · 内置浏览器自动测试 · 全新插件生态</div>
         </div>
         <span class="news-badge badge-new">升级</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        Cursor 3 是编程工具的一次范式升级。多个 AI Agent 可在同一工作区协同工作，分别负责编码、测试和文档。内置浏览器自动化测试，实现"写代码→运行测试→自动修复"的完整闭环。插件生态全面开放，支持第三方扩展。
+        <div class="news-source">来源：Cursor Blog · Product Hunt</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🎬</span>
         <div class="news-body">
           <div class="news-title">快手可灵 AI 月活破 780 万，登顶全球 AI 视频榜</div>
           <div class="news-sub">超越 Sora 峰值 470 万 · OpenAI 已关停 Sora · 中国产品全球领跑</div>
         </div>
         <span class="news-badge badge-data">📊 数据</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        快手旗下可灵 AI 的月活用户突破 780 万，超越 OpenAI Sora 峰值期的 470 万。OpenAI 已正式关停 Sora 独立产品，将其能力并入 ChatGPT。可灵在运动流畅度和物理真实感上持续领先，成为中国 AI 出海最成功的案例之一。
+        <div class="news-source">来源：App Annie · 36氪</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🚨</span>
         <div class="news-body">
           <div class="news-title">AI 智能体 4 小时自主攻破 FreeBSD，无人工干预获 Root 权限</div>
           <div class="news-sub">CVE-2026-4747 · 基于 Claude · 影响 Netflix/PlayStation 等基础设施</div>
         </div>
         <span class="news-badge badge-warn">⚠️ 安全</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        Anthropic Claude 智能体在完全自主的情况下，4 小时内发现并利用了 FreeBSD 内核的一个零日漏洞（CVE-2026-4747），成功获取 Root 权限。此漏洞影响 Netflix、PlayStation 等大量基础设施。AI 安全攻防已进入全新阶段，防御明显落后于攻击。
+        <div class="news-source">来源：Anthropic 安全博客</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🇨🇳</span>
         <div class="news-body">
           <div class="news-title">中国 AI 周调用量 7.36 万亿 Token，连续三周超越美国</div>
           <div class="news-sub">DeepSeek V4 深度适配华为芯片 · 中美 AI 生态加速脱钩</div>
         </div>
         <span class="news-badge badge-data">📊 数据</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        中国市场 AI 大模型周调用量达到 7.36 万亿 Token，连续第三周超越美国。DeepSeek V4 已深度适配华为昇腾芯片，在国产算力上实现了接近 NVIDIA 的性能。中美 AI 生态在基础设施层面加速脱钩，各自形成独立技术栈。
+        <div class="news-source">来源：IDC · 财新</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">📜</span>
         <div class="news-body">
           <div class="news-title">广电联合会出手：七类 AI 侵权行为明令禁止</div>
           <div class="news-sub">AI 换脸/声纹克隆/深度伪造 · 红果短剧成首个下架案例</div>
         </div>
         <span class="news-badge badge-warn">监管</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
       </div>
-      <div class="news-item">
+      <div class="news-expand">
+        中国广播电视社会组织联合会发布 AI 内容治理指导意见，明确禁止七类 AI 侵权行为，包括未经授权的 AI 换脸、声纹克隆和深度伪造。字节跳动旗下红果短剧因 AI 生成内容问题成为首个被下架的案例。
+        <div class="news-source">来源：新华社 · 36氪</div>
+      </div>
+
+      <div class="news-item" onclick="toggleNews(this)">
         <span class="news-emoji">🎙️</span>
         <div class="news-body">
           <div class="news-title">OpenAI 收购科技播客平台 TBPN，争夺 AGI 时代舆论叙事权</div>
           <div class="news-sub">COO/CMO 相继离职 · IPO 治理稳定性受质疑</div>
         </div>
         <span class="news-badge badge-hot">热议</span>
+        <button class="news-toggle" aria-label="展开">▸</button>
+      </div>
+      <div class="news-expand">
+        OpenAI 收购科技播客网络 The Bot Press Network（TBPN），试图在 AGI 到来之前掌控科技舆论叙事。与此同时，首席运营官和首席营销官在一个月内相继离职，外界对 OpenAI IPO 前的治理稳定性持续担忧。
+        <div class="news-source">来源：The Verge · TechCrunch</div>
       </div>
     </div>
   </div>
@@ -688,6 +978,14 @@
     </div>
   </div>
 
+  <!-- 筛选结果状态条 -->
+  <div class="filter-status" id="filterStatus">
+    <span>正在查看：</span>
+    <span class="fs-cat" id="fsCat"></span>
+    <span class="fs-count" id="fsCount"></span>
+    <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;margin-left:8px;" onclick="clearFilter()">✕ 清除筛选</button>
+  </div>
+
   <!-- 本周新品 -->
   <div class="section" id="section-new">
     <div class="section-header">
@@ -699,29 +997,29 @@
   </div>
 
   <!-- ── 订阅区块 ── -->
-  <div class="subscribe-block">
+  <div class="subscribe-block" id="subscribe">
     <h3>每周一早 8 点，AI 雷达准时送达</h3>
     <p>不追热点，只选有价值的。免费版每周摘要 · Pro 版深度分析 + 竞品对比报告</p>
     <div class="sub-plans">
-      <div class="sub-plan">
+      <div class="sub-plan" onclick="handlePlanSelect('free',this)">
         <div class="plan-price">免费</div>
         <div class="plan-name">基础订阅</div>
         <div class="plan-perks">每周 AI 动态摘要<br>Product Hunt 热榜<br>邮件推送</div>
       </div>
-      <div class="sub-plan popular">
+      <div class="sub-plan popular" onclick="handlePlanSelect('pro',this)">
         <div class="plan-price">¥29<span>/月</span></div>
         <div class="plan-name">Pro 会员</div>
         <div class="plan-perks">深度竞品分析报告<br>趋势预判 + 机会点<br>专属读者社群<br>历史档案全访问</div>
       </div>
-      <div class="sub-plan">
+      <div class="sub-plan" onclick="handlePlanSelect('year',this)">
         <div class="plan-price">¥199<span>/年</span></div>
         <div class="plan-name">年度会员</div>
         <div class="plan-perks">Pro 全部权益<br>年度 AI 产业报告<br>早鸟价锁定</div>
       </div>
     </div>
-    <div class="sub-input-row">
-      <input class="sub-input" type="email" placeholder="输入邮箱，免费订阅每周 AI 动态" />
-      <button class="btn-primary" onclick="handleSubscribe(this)">免费订阅</button>
+    <div class="sub-input-row" id="subInputRow">
+      <input class="sub-input" type="email" id="subEmail" placeholder="输入邮箱，免费订阅每周 AI 动态" />
+      <button class="btn-primary" onclick="handleSubscribe()">免费订阅</button>
     </div>
   </div>
 
@@ -730,15 +1028,15 @@
     <h3>💎 精选推荐位 · 让更多人发现你的产品</h3>
     <p>每期限量 3 个"精选推荐"展示位，置顶展示 7 天<br>精准触达每周 AI 从业者、开发者、创业者读者群</p>
     <div class="promote-cards">
-      <div class="promote-slot filled">
+      <div class="promote-slot filled clickable" onclick="openModal(findProduct('ZooClaw'))">
         <div class="slot-icon">🤖</div>
         <div class="card-name" style="font-size:13px;">ZooClaw</div>
-        <div class="slot-label">已收录 · 本周</div>
+        <div class="slot-label">已收录 · 本周 · 点击查看详情</div>
       </div>
-      <div class="promote-slot filled">
+      <div class="promote-slot filled clickable" onclick="openModal(findProduct('Cursor 3'))">
         <div class="slot-icon">💻</div>
         <div class="card-name" style="font-size:13px;">Cursor 3</div>
-        <div class="slot-label">已收录 · 本周</div>
+        <div class="slot-label">已收录 · 本周 · 点击查看详情</div>
       </div>
       <div class="promote-slot">
         <div class="slot-icon" style="font-size:24px;color:var(--text3);">+</div>
@@ -759,6 +1057,14 @@
       <div class="count" id="count-featured">0</div>
     </div>
     <div class="grid" id="grid-featured"></div>
+  </div>
+
+  <!-- 空状态 -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">🔍</div>
+    <div class="empty-title">未找到相关工具</div>
+    <div class="empty-desc" id="emptyDesc">试试其他关键词，或切换分类查看</div>
+    <button class="empty-clear" onclick="clearFilter()">查看全部工具</button>
   </div>
 
   <!-- ── 定价锚点 ── -->
@@ -798,6 +1104,34 @@
   <p style="margin-top:6px;">数据来源：Product Hunt · 财新 · 36氪 · The Neuron · TechCrunch</p>
 </footer>
 
+<!-- ── 详情弹窗 ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-icon" id="modalIcon"></div>
+      <div class="modal-info">
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-tagline" id="modalTagline"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-section-title">分类</div>
+      <div class="modal-tags" id="modalCatTag"></div>
+      <div class="modal-section-title">标签</div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-section-title">核心亮点</div>
+      <ul class="modal-features" id="modalFeatures"></ul>
+    </div>
+    <div class="modal-actions">
+      <a class="btn-visit" id="modalLink" href="#" target="_blank" rel="noopener">访问官网 →</a>
+      <button class="btn-back" onclick="closeModal()">返回列表</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── 产品数据 ──────────────────────────────────────────────
 const newProducts = [
@@ -807,7 +1141,9 @@ const newProducts = [
     desc: "多个 AI 智能体在同一工作区协同，分别负责编码、测试、文档。本地+云端无缝切换，内置浏览器自动化测试，实现「写代码→测试→修复」完整闭环。",
     icon: "💻", bg: "#1a2535",
     cat: "编程", votes: 334, featured: true, heat: 5,
-    tags: ["Agent", "IDE", "云端协同"]
+    tags: ["Agent", "IDE", "云端协同"],
+    url: "https://cursor.sh",
+    features: ["多 Agent 协同编程","内置浏览器自动测试","本地+云端无缝切换","全新插件生态开放","支持主流编程语言"]
   },
   {
     name: "Google Gemma 4",
@@ -815,7 +1151,9 @@ const newProducts = [
     desc: "31B 参数在推理与编程基准上达到20倍体量竞品的85%性能。256K超长上下文，Apache 2.0 协议商用友好，E2B/E4B 小型号甚至可在树莓派上运行。",
     icon: "🧠", bg: "#1a2030",
     cat: "模型", votes: 394, featured: true, heat: 5,
-    tags: ["开源", "多模态", "边缘端"]
+    tags: ["开源", "多模态", "边缘端"],
+    url: "https://ai.google.dev/gemma",
+    features: ["31B 参数对标大模型 85% 性能","256K 超长上下文","Apache 2.0 商用友好","E2B/E4B 支持树莓派","算力节省 40%"]
   },
   {
     name: "Qwen3.6-Plus",
@@ -823,7 +1161,9 @@ const newProducts = [
     desc: "专为 AI 智能体编程场景深度优化，支持 100 万字符超长上下文。工具调用、多步骤任务规划能力突出，在主流 Agent 编程评测中超越同级竞品 2-3 倍。",
     icon: "🇨🇳", bg: "#1d1a25",
     cat: "模型", votes: 140, featured: true, heat: 4,
-    tags: ["国产", "Agent", "编程"]
+    tags: ["国产", "Agent", "编程"],
+    url: "https://qwen.aliyun.com",
+    features: ["100 万字符超长上下文","Agent 编程评测超越同级 2-3 倍","工具调用能力突出","多模态版支持截图生成代码","深度适配华为昇腾芯片"]
   },
   {
     name: "ZooClaw",
@@ -831,7 +1171,9 @@ const newProducts = [
     desc: "用自然语言提问，任务自动路由到具有结构化领域知识的对应智能体，并以自然语音回复。无需设置、无需部署、无需 API 密钥，即开即用。",
     icon: "🤖", bg: "#1e1a20",
     cat: "智能体", votes: 360, featured: true, heat: 5,
-    tags: ["零配置", "语音", "路由"]
+    tags: ["零配置", "语音", "路由"],
+    url: "https://zooclaw.com",
+    features: ["零配置即开即用","智能路由到领域专家","自然语音交互","无需 API 密钥","多领域知识覆盖"]
   },
   {
     name: "VoiceOS",
@@ -839,7 +1181,9 @@ const newProducts = [
     desc: "面向桌面的通用语音→动作系统。通过自然语音命令消除应用间切换，专注度最大化。Mac 和 Windows 全局可用，无需唤醒词。",
     icon: "🎙️", bg: "#1a2020",
     cat: "效率", votes: 255, featured: false, heat: 4,
-    tags: ["语音", "Mac", "Windows"]
+    tags: ["语音", "Mac", "Windows"],
+    url: "https://voiceos.ai",
+    features: ["全局语音控制桌面","无需唤醒词","跨应用操作","Mac + Windows 支持","专注度最大化"]
   },
   {
     name: "NotebookLM 信息图样式",
@@ -847,7 +1191,9 @@ const newProducts = [
     desc: "将任何资料源直接转换为精美信息图，支持10种预设样式和自定义模式，从研究到可视化只需数秒。Google 出品，NotebookLM 最新更新。",
     icon: "📊", bg: "#1a2218",
     cat: "写作", votes: 179, featured: false, heat: 3,
-    tags: ["可视化", "Google", "报告"]
+    tags: ["可视化", "Google", "报告"],
+    url: "https://notebooklm.google.com",
+    features: ["10 种预设信息图样式","自定义模式","支持多种资料源","Google 出品免费","一键从研究到可视化"]
   },
   {
     name: "Straude",
@@ -855,7 +1201,9 @@ const newProducts = [
     desc: "面向 Claude Code 用户的全球 Token 消耗排行榜，追踪每日花费、连续记录和使用统计，与全球顶级 AI 构建者对比，了解自己的使用强度。",
     icon: "📈", bg: "#1a1e28",
     cat: "效率", votes: 153, featured: false, heat: 3,
-    tags: ["Claude", "统计", "开发者"]
+    tags: ["Claude", "统计", "开发者"],
+    url: "https://straude.com",
+    features: ["全球 Token 消耗排行","每日花费追踪","连续使用记录","与全球构建者对比","开发者社区"]
   },
   {
     name: "ChatGPT on CarPlay",
@@ -863,7 +1211,9 @@ const newProducts = [
     desc: "在 Apple CarPlay 上接入 ChatGPT 语音功能，驾驶时免提使用 AI。全球所有套餐均可用，无需额外订阅。",
     icon: "🚗", bg: "#201a1a",
     cat: "效率", votes: 130, featured: false, heat: 3,
-    tags: ["iOS", "语音", "驾驶"]
+    tags: ["iOS", "语音", "驾驶"],
+    url: "https://openai.com/chatgpt",
+    features: ["Apple CarPlay 原生支持","免提语音交互","全球所有套餐可用","无需额外订阅","安全驾驶友好"]
   },
   {
     name: "Otto by Audos",
@@ -871,7 +1221,9 @@ const newProducts = [
     desc: "自动构建落地页、运行广告、为你获取首位客户，实现从想法到营收的无代码全自动化流程。适合独立开发者和早期创业者。",
     icon: "🚀", bg: "#1e1e1a",
     cat: "智能体", votes: 126, featured: false, heat: 3,
-    tags: ["创业", "无代码", "自动化"]
+    tags: ["创业", "无代码", "自动化"],
+    url: "https://otto.audos.com",
+    features: ["自动构建落地页","自动运行广告","获取首批客户","无代码全自动化","适合独立开发者"]
   },
   {
     name: "StampCut",
@@ -879,7 +1231,9 @@ const newProducts = [
     desc: "用 iPhone 摄像头指向任何物体——植物、动物、日常物品——框选并捕获为属于自己的数字「邮票」。收藏你遇见的一切。",
     icon: "📮", bg: "#1a1e20",
     cat: "效率", votes: 118, featured: false, heat: 2,
-    tags: ["iOS", "收藏", "创意"]
+    tags: ["iOS", "收藏", "创意"],
+    url: "https://stampcut.app",
+    features: ["iPhone 摄像头实时捕获","万物皆可「邮票化」","数字收藏体验","创意社交分享","AR 增强现实"]
   }
 ];
 
@@ -890,7 +1244,9 @@ const featuredProducts = [
     desc: "最新版本在长文推理、代码理解和工具调用上全面升级。4 小时内自主发现 FreeBSD 零日漏洞，展示了 AI 自主能力的最新边界。",
     icon: "🤖", bg: "#1a1a28",
     cat: "模型", votes: null, featured: true, heat: 5,
-    tags: ["推理", "安全", "工具调用"]
+    tags: ["推理", "安全", "工具调用"],
+    url: "https://claude.ai",
+    features: ["长文推理能力全面升级","4 小时自主发现零日漏洞","代码理解与生成领先","工具调用精准可靠","安全对齐业界标杆"]
   },
   {
     name: "可灵 AI (Kling)",
@@ -898,7 +1254,9 @@ const featuredProducts = [
     desc: "快手出品的 AI 视频生成工具，月活突破 780 万，超越已关停的 Sora。支持文字转视频、图片转视频，在运动流畅度和物理真实感上领先同类产品。",
     icon: "🎬", bg: "#201a1a",
     cat: "视频", votes: null, featured: true, heat: 5,
-    tags: ["国产", "文生视频", "移动端"]
+    tags: ["国产", "文生视频", "移动端"],
+    url: "https://kling.kuaishou.com",
+    features: ["月活 780 万全球第一","文字转视频 + 图片转视频","运动流畅度领先","物理真实感突出","完全免费使用"]
   },
   {
     name: "Midjourney V7",
@@ -906,7 +1264,9 @@ const featuredProducts = [
     desc: "最新版本大幅提升了人物细节、手部渲染和光影控制。支持个性化风格训练，提供 Draft 模式快速出图，是商业创意工作的首选工具。",
     icon: "🎨", bg: "#1a1e20",
     cat: "图像", votes: null, featured: true, heat: 5,
-    tags: ["创意", "商用", "风格训练"]
+    tags: ["创意", "商用", "风格训练"],
+    url: "https://midjourney.com",
+    features: ["人物细节大幅提升","手部渲染真实","个性化风格训练","Draft 模式快速出图","商业创意首选"]
   },
   {
     name: "GitHub Copilot Enterprise",
@@ -914,7 +1274,9 @@ const featuredProducts = [
     desc: "接入企业私有代码库，理解上下文后给出针对性建议。支持代码审查、文档生成、测试编写。Chat 功能可直接回答关于特定 PR 和 Issue 的问题。",
     icon: "⚡", bg: "#1a2020",
     cat: "编程", votes: null, featured: false, heat: 4,
-    tags: ["企业", "代码库", "PR"]
+    tags: ["企业", "代码库", "PR"],
+    url: "https://github.com/features/copilot",
+    features: ["理解企业私有代码库","智能代码审查","自动文档生成","自动测试编写","PR/Issue 问答"]
   },
   {
     name: "Perplexity Pro",
@@ -922,7 +1284,9 @@ const featuredProducts = [
     desc: "每次回答都附带真实信息来源，支持追问和深度研究模式。Pro 版接入 GPT-5、Claude、Gemini 多个模型，支持文件上传分析和图像搜索。",
     icon: "🔍", bg: "#1a1e28",
     cat: "写作", votes: null, featured: false, heat: 4,
-    tags: ["搜索", "引用", "研究"]
+    tags: ["搜索", "引用", "研究"],
+    url: "https://perplexity.ai",
+    features: ["每次回答附带引用来源","多模型切换（GPT-5/Claude/Gemini）","深度研究模式","文件上传分析","图像搜索支持"]
   },
   {
     name: "Runway Gen-4",
@@ -930,7 +1294,9 @@ const featuredProducts = [
     desc: "最新 Gen-4 版本解决了 AI 视频最大痛点——角色跨镜头一致性。支持基于参考图的精准控制，在时装、广告、短片创作领域获得大量专业用户。",
     icon: "🎥", bg: "#1e1a1a",
     cat: "视频", votes: null, featured: false, heat: 4,
-    tags: ["角色一致", "广告", "专业"]
+    tags: ["角色一致", "广告", "专业"],
+    url: "https://runwayml.com",
+    features: ["角色跨镜头一致性","参考图精准控制","好莱坞级画质","时装/广告专业场景","短片创作全流程"]
   },
   {
     name: "Notion AI",
@@ -938,7 +1304,9 @@ const featuredProducts = [
     desc: "无缝集成在 Notion 中，可总结文档、起草内容、提取行动项、翻译文本。最新 Q1 版本支持跨页面知识检索，回答基于你整个 Workspace 的内容。",
     icon: "📝", bg: "#1a1e1a",
     cat: "写作", votes: null, featured: false, heat: 4,
-    tags: ["文档", "协作", "知识库"]
+    tags: ["文档", "协作", "知识库"],
+    url: "https://notion.so/product/ai",
+    features: ["总结文档 + 起草内容","提取行动项","跨页面知识检索","翻译 20+ 语言","无缝集成 Notion 工作流"]
   },
   {
     name: "ElevenLabs",
@@ -946,11 +1314,19 @@ const featuredProducts = [
     desc: "只需 1 分钟音频即可克隆任意声音。支持 30+ 语言，情感控制，实时语音生成。广泛用于有声书、播客、视频配音和游戏 NPC。",
     icon: "🔊", bg: "#1a2025",
     cat: "写作", votes: null, featured: false, heat: 4,
-    tags: ["声音克隆", "配音", "多语言"]
+    tags: ["声音克隆", "配音", "多语言"],
+    url: "https://elevenlabs.io",
+    features: ["1 分钟音频克隆任意声音","30+ 语言支持","情感控制","实时语音生成","有声书/播客/游戏应用"]
   }
 ];
 
-// ── 渲染函数 ──────────────────────────────────────────────
+// ── 辅助函数 ──────────────────────────────────────────────
+const allProducts = [...newProducts, ...featuredProducts];
+
+function findProduct(name) {
+  return allProducts.find(p => p.name === name);
+}
+
 function catClass(cat) {
   const map = { "模型":"cat-model","编程":"cat-code","图像":"cat-image","视频":"cat-video","写作":"cat-write","智能体":"cat-agent","安全":"cat-security","效率":"cat-productivity" };
   return map[cat] || "tag-cat";
@@ -962,14 +1338,15 @@ function heatDots(h) {
   return html + '</div>';
 }
 
+// ── 渲染卡片 ──────────────────────────────────────────────
 function renderCard(p) {
   const voteHtml = p.votes ? `<span class="votes">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
     ${p.votes}
   </span>` : '';
-  const tagsHtml = (p.tags||[]).map(t=>`<span class="tag tag-cat">${t}</span>`).join('');
+  const tagsHtml = (p.tags||[]).slice(0,3).map(t=>`<span class="tag tag-cat">${t}</span>`).join('');
   return `
-    <div class="card${p.featured?' featured':''}" data-cat="${p.cat}" data-name="${p.name.toLowerCase()}">
+    <div class="card${p.featured?' featured':''}" data-cat="${p.cat}" data-name="${p.name}" onclick="openModal(findProduct('${p.name}'))">
       <div class="card-top">
         <div class="card-icon" style="background:${p.bg}">${p.icon}</div>
         <div class="card-info">
@@ -988,23 +1365,111 @@ function renderCard(p) {
 
 function renderAll(cat='all', keyword='') {
   const kw = keyword.toLowerCase();
+  let totalCount = 0;
+
   ['new','featured'].forEach(section => {
     const products = section==='new' ? newProducts : featuredProducts;
     const grid = document.getElementById('grid-'+section);
     let count = 0;
     grid.innerHTML = products.map(p => {
       const matchCat = cat==='all' || p.cat===cat;
-      const matchKw = !kw || p.name.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw) || p.tagline.toLowerCase().includes(kw);
+      const matchKw = !kw || p.name.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw) || p.tagline.toLowerCase().includes(kw) || (p.tags||[]).some(t=>t.toLowerCase().includes(kw));
       if (matchCat && matchKw) { count++; return renderCard(p); }
-      return `<div class="card hidden" data-cat="${p.cat}" data-name="${p.name.toLowerCase()}"></div>`;
+      return '';
     }).join('');
     document.getElementById('count-'+section).textContent = count;
-    // 隐藏整个 section 如果没有结果
     document.getElementById('section-'+section).style.display = count ? '' : 'none';
+    totalCount += count;
   });
+
+  // 筛选状态条
+  const status = document.getElementById('filterStatus');
+  const empty = document.getElementById('emptyState');
+  if (cat !== 'all' || kw) {
+    status.classList.add('show');
+    document.getElementById('fsCat').textContent = cat !== 'all' ? cat + '类' : '全部';
+    if (kw) document.getElementById('fsCat').textContent = `"${kw}" 的搜索结果`;
+    document.getElementById('fsCount').textContent = totalCount + ' 个工具';
+    document.getElementById('emptyDesc').textContent = kw
+      ? `没有找到包含「${kw}」的工具`
+      : `「${cat}」分类暂无收录工具`;
+  } else {
+    status.classList.remove('show');
+  }
+  empty.style.display = totalCount === 0 && (cat !== 'all' || kw) ? 'block' : 'none';
 }
 
-// ── 事件 ──────────────────────────────────────────────────
+// ── 详情弹窗 ──────────────────────────────────────────────
+function openModal(p) {
+  if (!p) return;
+  document.getElementById('modalIcon').style.background = p.bg;
+  document.getElementById('modalIcon').textContent = p.icon;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalTagline').textContent = p.tagline;
+  document.getElementById('modalDesc').textContent = p.desc;
+
+  // 分类
+  document.getElementById('modalCatTag').innerHTML = `<span class="modal-cat-tag ${catClass(p.cat)}">${p.cat}</span>`;
+
+  // 标签
+  document.getElementById('modalTags').innerHTML = (p.tags||[]).map(t=>`<span class="modal-tag">${t}</span>`).join('');
+
+  // 元数据
+  const catEmoji = {'模型':'🧠','编程':'💻','图像':'🎨','视频':'🎬','写作':'✍️','智能体':'🤖','效率':'⚡'}[p.cat] || '🌐';
+  let metaHtml = `
+    <div class="modal-meta-item">
+      <div class="meta-label">分类</div>
+      <div class="meta-value">${catEmoji} ${p.cat}</div>
+    </div>`;
+  if (p.votes) {
+    metaHtml += `
+    <div class="modal-meta-item">
+      <div class="meta-label">Product Hunt 票数</div>
+      <div class="meta-value">▲ ${p.votes}</div>
+    </div>`;
+  }
+  metaHtml += `
+    <div class="modal-meta-item">
+      <div class="meta-label">热度</div>
+      <div class="meta-value">${'🔥'.repeat(p.heat)}${'☆'.repeat(5-p.heat)}</div>
+    </div>
+    <div class="modal-meta-item">
+      <div class="meta-label">状态</div>
+      <div class="meta-value">${p.featured ? '⭐ 本周热门' : '📊 持续收录'}</div>
+    </div>`;
+  document.getElementById('modalMeta').innerHTML = metaHtml;
+
+  // 核心亮点
+  document.getElementById('modalFeatures').innerHTML = (p.features||[]).map(f=>`<li>${f}</li>`).join('');
+
+  // 链接
+  const link = document.getElementById('modalLink');
+  if (p.url) {
+    link.href = p.url;
+    link.style.display = '';
+  } else {
+    link.style.display = 'none';
+  }
+
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ESC 关闭弹窗
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeNav();
+  }
+});
+
+// ── 事件：分类筛选 ────────────────────────────────────────
 let currentCat = 'all';
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1012,16 +1477,79 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.classList.add('active');
     currentCat = btn.dataset.cat;
     renderAll(currentCat, document.getElementById('searchInput').value);
+    // 平滑滚动到新品区域
+    if (currentCat !== 'all') {
+      document.getElementById('section-new').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 });
 
+// ── 事件：搜索 ───────────────────────────────────────────
+let searchTimer;
 document.getElementById('searchInput').addEventListener('input', e => {
-  renderAll(currentCat, e.target.value);
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    renderAll(currentCat, e.target.value);
+  }, 200);
 });
 
+function clearFilter() {
+  currentCat = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-cat="all"]').classList.add('active');
+  document.getElementById('searchInput').value = '';
+  renderAll('all', '');
+}
+
+// ── 新闻展开/收起 ────────────────────────────────────────
+function toggleNews(item) {
+  const expand = item.nextElementSibling;
+  if (!expand || !expand.classList.contains('news-expand')) return;
+
+  const isOpen = item.classList.contains('expanded');
+  // 关闭所有
+  document.querySelectorAll('.news-item.expanded').forEach(el => {
+    el.classList.remove('expanded');
+    el.querySelector('.news-toggle').textContent = '▸';
+    const next = el.nextElementSibling;
+    if (next && next.classList.contains('news-expand')) next.classList.remove('show');
+  });
+
+  if (!isOpen) {
+    item.classList.add('expanded');
+    item.querySelector('.news-toggle').textContent = '▾';
+    expand.classList.add('show');
+  }
+}
+
+// ── 导航汉堡菜单 ──────────────────────────────────────────
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
 // ── 订阅交互 ──────────────────────────────────────────────
-function handleSubscribe(btn) {
-  const input = btn.previousElementSibling;
+function handlePlanSelect(plan, el) {
+  const row = document.getElementById('subInputRow');
+  const input = document.getElementById('subEmail');
+
+  if (plan === 'free') {
+    input.placeholder = '输入邮箱，免费订阅每周 AI 动态';
+    input.focus();
+  } else if (plan === 'pro') {
+    input.placeholder = '输入邮箱，开始 Pro 会员免费试用';
+    input.focus();
+  } else {
+    window.open('mailto:contact@ai-radar.cn?subject=申请年度会员', '_self');
+  }
+}
+
+function handleSubscribe() {
+  const input = document.getElementById('subEmail');
   const email = input.value.trim();
   if (!email || !email.includes('@')) {
     input.style.borderColor = 'var(--red)';
@@ -1029,14 +1557,14 @@ function handleSubscribe(btn) {
     setTimeout(()=>{ input.style.borderColor=''; input.placeholder='输入邮箱，免费订阅每周 AI 动态'; },2000);
     return;
   }
-  btn.textContent = '✓ 订阅成功！';
-  btn.style.background = 'var(--green)';
-  btn.style.color = '#000';
   input.value = '';
-  input.placeholder = '已加入订阅列表，每周一早 8 点见 👋';
-  // 实际项目：这里接入 Mailchimp / Resend / 微信服务号 API
+  input.placeholder = '✓ 已加入订阅列表，每周一早 8 点见 👋';
+  input.style.borderColor = 'var(--green)';
+  setTimeout(()=>{ input.style.borderColor=''; input.placeholder='输入邮箱，免费订阅每周 AI 动态'; },4000);
 }
 
+// ── 初始渲染 ──────────────────────────────────────────────
+renderAll();
 </script>
 </body>
 </html>
